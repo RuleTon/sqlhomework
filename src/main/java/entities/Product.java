@@ -1,4 +1,7 @@
+package entities;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,6 +18,9 @@ public class Product {
 
     @Column(name = "cost")
     private int cost;
+
+    @OneToMany(mappedBy = "product")
+    private List<Product> products;
 
 
 

@@ -1,17 +1,34 @@
+package repositories;
+
+import entities.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
+@Component
 public class Crud {
     private static SessionFactory factory = new Configuration()
             .configure("configs/products/hibernate.cfg.xml")
             .buildSessionFactory();
 
-    public static void init() {
-        PrepareDataApp.forcePrepareData();
+    private SessionFactory sessionFactory;
+
+    @Autowired
+    public Crud(EntityManagerFactory factory) {
+        if(factory.unwrap(SessionFactory.class) == null) {
+            throw new NullPointerException("not hibernate");
+        }
+        this.sessionFactory = factory.unwrap(SessionFactory.class);
     }
+
+//   public static void init() {
+ //      PrepareDataApp.forcePrepareData();
+//  }
 
     public static void showManyItems() {
         try (Session session = factory.getCurrentSession()) {
@@ -74,7 +91,7 @@ public class Crud {
 
     public static void main(String[] args) {
         try {
-            init();
+     //       init();
             add();
             // readAndPrintExample();
             // updateExample();
